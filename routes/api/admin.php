@@ -37,6 +37,7 @@ Route::group(['prefix' => 'products'], function () {
     Route::post('/{id}',   [ProductController::class, 'update']); // Update
     Route::delete('/{id}', [ProductController::class, 'delete']); // Delete a Record
 
+    //================================================>> Product Type
     Route::group(['prefix' => 'types'], function () {
 
         Route::get('/',        [ProductTypeController::class, 'getData']); // Read Many Records
@@ -51,6 +52,7 @@ Route::group(['prefix' => 'products'], function () {
 // ===========================================================================>> User
 Route::group(['prefix' => 'users'], function () {
 
+    Route::get('/types',                    [UserController::class, 'getUserType']);
     Route::get('/', 						[UserController::class, 'getData']); // Read Many Records
     Route::get('/{id}', 					[UserController::class, 'view']); // View a Record
     Route::post('/', 						[UserController::class, 'create']); // Create New Record
@@ -59,8 +61,6 @@ Route::group(['prefix' => 'users'], function () {
 
     Route::post('/block/{id}', 			    [UserController::class, 'block']); // Block a user. Make sure that he/she cannot login
     Route::post('/{id}/change-password',    [UserController::class, 'changePassword']); // Change the Password
-
-    Route::get('/types',                    [UserController::class, 'getUserType']);
 
 });
 

@@ -23,7 +23,7 @@ use App\Models\User\User;
 
 class UserController extends MainController
 {
-    public function getType(){
+    public function getUserType(){
 
         // ===>> Get Data from Database
         $data = Type::get();
