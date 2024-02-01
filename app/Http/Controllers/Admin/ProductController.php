@@ -1,23 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Product;
+namespace App\Http\Controllers\Admin;
 
-// ================================>> Core Library
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+// ============================================================================>> Core Library
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
 
-// ================================>> Third Party
-use Carbon\Carbon;
+// ============================================================================>> Third Party Library
+use Carbon\Carbon; // Data Time format & Calculation
 
-// ================================>> Custome Library
-use App\Http\Controllers\Controller;
+// ============================================================================>> Custome Library
+// Controller
+use App\Http\Controllers\MainController;
+
+// Service
+use App\Services\FileUpload; // Upload Image/File to File Micro Serivce
+
+// Model
 use App\Models\Product\Product;
 
-use App\Services\FileUpload;
-
-class ProductController extends Controller
+class ProductController extends MainController
 {
-    public function listing(Request $req)
+    public function getData(Request $req)
     {
         $data = Product::select('*')
         ->with(['type'])

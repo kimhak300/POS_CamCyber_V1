@@ -1,19 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+// ============================================================================>> Core Library
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
+use Illuminate\Support\Facades\Hash; // For Encripting data
+
+// ============================================================================>> Core Library
+use Carbon\Carbon; // Data Time format & Calculation
+
+// ============================================================================>> Custom Library
+// Controller
+use App\Http\Controllers\MainController;
+
+// Service
+use App\Services\FileUpload; // Upload Image/File to File Micro Serivce
+
+// Model
 use App\Models\User\Type;
 use App\Models\User\User;
-use App\Services\FileUpload;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
-class UserController extends Controller
+class UserController extends MainController
 {
-    public function listing(Request $req)
+    public function getData(Request $req)
     {
         $data = User::select('id', 'name', 'phone', 'email', 'type_id', 'avatar', 'created_at', 'is_active')->with(['type']);
         //Filter

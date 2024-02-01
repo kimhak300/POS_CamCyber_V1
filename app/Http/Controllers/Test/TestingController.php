@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 // ===================================================>> Custom Library
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 
 class TestingController extends Controller
 {

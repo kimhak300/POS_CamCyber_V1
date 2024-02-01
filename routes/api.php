@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\EmailController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,35 +14,26 @@ use Illuminate\Support\Facades\Route;
     |
     */
 
-    //============>>  Testing
-    Route::group(['prefix' => 'testing'], function () {
-        require(__DIR__ . '/api/testing.php');
+    // ==============================================>>  Login
+    Route::group(['prefix' => 'auth'], function () {
+        require(__DIR__ . '/api/auth.php');
     });
 
-    //============>>  Dashboard
-    require(__DIR__ . '/api/dashboard.php');
+    // ==============================================>>  Protected routes from Unauthorized Access
+    Route::group(['middleware' => ['jwt.verify']], function () {
 
-    //============>>  POS
-    require(__DIR__ . '/api/pos.php');
+        Route::group(['prefix' => 'admin'], function () {
+            require(__DIR__ . '/api/admin.php');
+        });
 
-    //============>>  Sale
-    require(__DIR__ . '/api/sale.php');
+        Route::group(['prefix' => 'profile'], function () {
+            require(__DIR__ . '/api/profile.php');
+        });
 
-    //============>>  Product
-    require(__DIR__ . '/api/product.php');
-
-    //============>>  User
-    require(__DIR__ . '/api/user.php');
-
-    //============>> My Profile
-    require(__DIR__ . '/api/myprofile.php');
-
-    // ===========>> Print
-    Route::group(['prefix' => 'print'], function () {
-        require(__DIR__ . '/api/printpdf.php');
     });
-});
 
-//Test Implement Send Email
-// Route::post('/send-email', [EmailController::class, 'sendEmail']);
-Route::post('/send-email', [EmailController::class, 'sendEmailRaw']);
+
+     // ==============================================>>  Test with Third Party via API
+    Route::group(['prefix' => 'test'], function () {
+        require(__DIR__ . '/api/test.php');
+    });

@@ -11,9 +11,9 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 // ===================================================>> Custom Library
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 
-class AuthController extends Controller
+class AuthController extends MainController
 {
     /**
      * Create a new AuthController instance.

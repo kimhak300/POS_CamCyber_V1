@@ -1,12 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\PrintPDF;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Order\Order;
+// ============================================================================>> Core Library
 use Illuminate\Support\Facades\Http;
 
-class PrintController extends Controller
+// ============================================================================>> Custom Library
+// Controller
+use App\Http\Controllers\MainController;
+
+// Model
+use App\Models\Order\Order;
+
+class PrintController extends MainController
 {
     //====================Global variable====================
     private $JS_BASE_URL;

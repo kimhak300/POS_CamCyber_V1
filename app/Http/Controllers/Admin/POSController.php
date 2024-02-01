@@ -1,20 +1,29 @@
 <?php
 
-namespace App\Http\Controllers\POS;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+// ============================================================================>> Core Library
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
+
+// ============================================================================>> Third Library
+use Tymon\JWTAuth\Facades\JWTAuth; // Get Current Logged User
+
+// ============================================================================>> Core Library
+// Controller
+use App\Http\Controllers\MainController;
+
+// Service
+use App\Services\TelegramService; //Send Notifications to Telegram Bot
+
+// Model
 use App\Models\Order\Detail;
 use App\Models\Order\Order;
 use App\Models\Product\Product;
 use App\Models\Product\Type as ProductType;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Facades\TelegramFacade;
-use App\Services\TelegramService;
-use Telegram;
 
-class POSController extends Controller
+
+class POSController extends MainController
 {
     public function getProducts()
     {
@@ -29,7 +38,6 @@ class POSController extends Controller
 
     public function makeOrder(Request $req)
     {
-        //return env('TELEGRAM_BOT_TOKEN');
 
         //==============================>> Check validation
         $this->validate($req, [
@@ -43,7 +51,7 @@ class POSController extends Controller
         $order                  = new Order;
         $order->cashier_id      = $user->id;
         $order->total_price     = 0;
-        $order->receipt_number  = $this->generateReceiptNumber();
+        $order->receipt_number  = $this->_generateReceiptNumber();
         $order->save();
 
         // ===>> Find Total Price & Order Detail
@@ -88,6 +96,28 @@ class POSController extends Controller
             ])
             ->find($order->id);
 
+        // ===>> Send Notification
+        $this->_sendNotification($orderData);
+
+        return response()->json([
+            'order'         => $orderData,
+            'message'       => 'ការបញ្ជាទិញត្រូវបានបង្កើតដោយជោគជ័យ។'
+        ], Response::HTTP_OK);
+    }
+
+    private function _generateReceiptNumber()
+    {
+        $number = rand(1000000, 9999999);
+        $check  = Order::where('receipt_number', $number)->first();
+        if ($check) {
+            return $this->_generateReceiptNumber();
+        }
+
+        return $number;
+    }
+
+    private function _sendNotification($orderData)
+    {
         // Send Telegram Notification
         $htmlMessage = "<b>ការបញ្ជាទិញទទួលបានជោគជ័យ!</b>\n";
         $htmlMessage .= "- លេខវិកយប័ត្រ៖ " . $orderData->receipt_number . "\n";
@@ -96,7 +126,7 @@ class POSController extends Controller
         $productList = '';
         $totalProducts = 0;
 
-        foreach ($order->details as $detail) {
+        foreach ($orderData->details as $detail) {
             $productList .= sprintf(
                 "%-20s | %-15s | %-10s | %s\n",
                 $detail->product->name,
@@ -110,26 +140,10 @@ class POSController extends Controller
         $htmlMessage .= "\n---------------------------------------\n";
         $htmlMessage .= "ផលិតផល             | តម្លៃដើម(៛)     | បរិមាណ\n";
         $htmlMessage .= $productList . "\n";
-        $htmlMessage .= "<b>* សរុបទាំងអស់៖</b> $totalProducts ទំនិញ $order->total_price ៛\n";
-        $htmlMessage .= "- កាលបរិច្ឆេទ: " . $order->ordered_at;
+        $htmlMessage .= "<b>* សរុបទាំងអស់៖</b> $totalProducts ទំនិញ $orderData->total_price ៛\n";
+        $htmlMessage .= "- កាលបរិច្ឆេទ: " . $orderData->ordered_at;
 
         //=================================
         TelegramService::sendMessage($htmlMessage);
-
-        return response()->json([
-            'order'         => $orderData,
-            'message'       => 'ការបញ្ជាទិញត្រូវបានបង្កើតដោយជោគជ័យ។'
-        ], Response::HTTP_OK);
-    }
-
-    function generateReceiptNumber()
-    {
-        $number = rand(1000000, 9999999);
-        $check  = Order::where('receipt_number', $number)->first();
-        if ($check) {
-            return $this->generateReceiptNumber();
-        }
-
-        return $number;
     }
 }

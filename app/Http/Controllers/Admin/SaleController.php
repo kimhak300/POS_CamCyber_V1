@@ -1,14 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Sale;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+// ============================================================================>> Core Library
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
+
+// ============================================================================>> Third Party Library
+use Tymon\JWTAuth\Facades\JWTAuth; // Get Current Logged User
+
+// ============================================================================>> Custom Library
+// Controller
+use App\Http\Controllers\MainController;
+
+// Model
 use App\Models\Order\Order;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
-class OrderController extends Controller
+class SaleController extends MainController
 {
     function isValidDate($date)
     {
@@ -19,7 +27,7 @@ class OrderController extends Controller
         }
     }
 
-    public function listing(Request $req)
+    public function getData(Request $req)
     {
         $data = Order::select('*')
             ->with([

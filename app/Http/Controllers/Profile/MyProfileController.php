@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\MyProfile;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\MainController;
 use App\Models\User\User;
 use App\Services\FileUpload;
 use Carbon\Carbon;
@@ -18,11 +18,11 @@ class MyProfileController extends Controller
         $auth = JWTAuth::parseToken()->authenticate();
         $user = User::select('id', 'name', 'phone', 'email', 'avatar')->where('id', $auth->id)->first();
         return response()->json($user, Response::HTTP_OK);
-        
+
     }
 
     public function update(Request $req){
-        
+
         //========================================================>>>> Data Validation
         $this->validate(
             $req,
@@ -41,7 +41,7 @@ class MyProfileController extends Controller
         );
 
         //========================================================>>>> Start to update user
-        
+
         $user = User::findOrFail(JWTAuth::parseToken()->authenticate()->id);
 
         if ($user) {
@@ -59,11 +59,11 @@ class MyProfileController extends Controller
                 //$folder = Carbon::today()->format('d') . '-' . Carbon::today()->format('M') . '-' . Carbon::today()->format('Y');
                 $folder = Carbon::today()->format('d-m-y');
 
-                //return $folder; 
+                //return $folder;
 
                 $avatar  = FileUpload::uploadFile($req->avatar, 'my-profile/', $req->fileName);
 
-                //return $avatar; 
+                //return $avatar;
 
                 if ($avatar['url']) {
 
@@ -115,7 +115,7 @@ class MyProfileController extends Controller
                 'new_password.required'     => 'សូមបញ្ចូលពាក្យសម្ងាត់ថ្មី',
                 'new_password.min'          => 'ពាក្យសម្ងាត់ថ្មី ត្រូវមាន៦ ខ្ទង់យ៉ាងតិច',
                 'new_password.max'          => 'ពាក្យសម្ងាត់ថ្មី ត្រូវមាន២០ ច្រើនបំផុត',
-                
+
                 'confirm_password.same'     => 'សូមបញ្ចាក់ថាពាក្យសម្ងាត់ថ្មី'
 
             ]
@@ -126,7 +126,7 @@ class MyProfileController extends Controller
         $user   = User::findOrFail($auth->id);
 
         if (Hash::check($req->old_password, $user->password)) { // Check comparision old & new password
-            
+
             // Pair Passowrd Field
             $user->password = Hash::make($req->password);
 
