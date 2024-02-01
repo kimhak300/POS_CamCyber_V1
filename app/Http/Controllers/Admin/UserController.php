@@ -65,7 +65,7 @@ class UserController extends MainController
             // ===> Success Response Back to Client
             return response()->json($data, Response::HTTP_OK);
 
-        } else {
+        } else { // No
 
             // ===> Failed Response Back to Client
             return response()->json([
@@ -111,7 +111,8 @@ class UserController extends MainController
         $user->avatar    =   'static/icon/user.png'; // Static Picture
 
         // ===>> Upload Avatar to File Service
-        if ($req->image) {
+        // Check if having request 'image' from client
+        if ($req->image) { // Yes
 
             // Call to File Service
             $image     = FileUpload::uploadFile($req->image, 'users', $req->fileName);
