@@ -23,6 +23,16 @@ use App\Models\User\User;
 
 class UserController extends MainController
 {
+    public function getType(){
+
+        // ===>> Get Data from Database
+        $data = Type::get();
+
+        // ===>> Response Back to Client
+        return response()->json($data, Response::HTTP_OK);
+
+    }
+
     public function getData(Request $req)
     {
         $data = User::select('id', 'name', 'phone', 'email', 'type_id', 'avatar', 'created_at', 'is_active')->with(['type']);
@@ -30,8 +40,11 @@ class UserController extends MainController
         if ($req->key && $req->key != '') {
             $data = $data->where('name', 'LIKE', '%' . $req->key . '%')->Orwhere('phone', 'LIKE', '%' . $req->key . '%');
         }
+
         $data = $data->orderBy('id', 'desc')
         ->paginate($req->limit ? $req->limit : 10,);
+
+        // Response Back to Client
         return response()->json($data, Response::HTTP_OK);
     }
 
@@ -203,11 +216,6 @@ class UserController extends MainController
         } else {
             return response()->json(['message' => 'មិនមានទិន្នន័យក្នុងប្រព័ន្ធ'], Response::HTTP_BAD_REQUEST);
         }
-    }
-    public function getType()
-    {
-        $data = Type::get();
-        return $data;
     }
 
     public function block(Request $req, $id = 0)
