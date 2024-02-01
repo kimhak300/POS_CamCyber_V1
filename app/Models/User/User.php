@@ -2,13 +2,18 @@
 
 namespace App\Models\User;
 
+// ===================================================>> Core Library
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\User\Type;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+// ===================================================>> Thirdd Party Library
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
+// ===================================================>> Custom Library
+use App\Models\User\Type;
 
 class User extends Authenticatable implements JWTSubject
 {

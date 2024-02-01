@@ -2,10 +2,13 @@
 
 namespace App\Models\Product;
 
+// ===================================================>> Core Library
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Product\Product;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+
+// ===================================================>> Custom Library
+use App\Models\Product\Product;
 
 class Type extends Model
 {
