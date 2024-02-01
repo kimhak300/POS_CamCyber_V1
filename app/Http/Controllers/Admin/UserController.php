@@ -7,7 +7,7 @@ use Illuminate\Http\Request; // For Getting requested Data from Client
 use Illuminate\Http\Response; // For Responsing data back to Client
 use Illuminate\Support\Facades\Hash; // For Encripting data
 
-// ============================================================================>> Core Library
+// ============================================================================>> Third Party Library
 use Carbon\Carbon; // Data Time format & Calculation
 
 // ============================================================================>> Custom Library

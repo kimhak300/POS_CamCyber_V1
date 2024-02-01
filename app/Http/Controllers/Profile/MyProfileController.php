@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers\MyProfile;
 
+// ============================================================================>> Core Library
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
+use Illuminate\Support\Facades\Hash; // For Encripting data
+
+// ============================================================================>> Third Party Library
+use Carbon\Carbon; // Data Time format & Calculation
+use Tymon\JWTAuth\Facades\JWTAuth; // Get Current Logged User
+
+// ============================================================================>> Custom Library
+// Controller
 use App\Http\Controllers\MainController;
+
+// Services
+use App\Services\FileUpload; // Upload Image/File to File Micro Serivce
+
+// Model
 use App\Models\User\User;
-use App\Services\FileUpload;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class MyProfileController extends Controller
 {
