@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 // ===================================================>> Core Library
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Response; // For Responsing data back to Client
 
 // ===================================================>> Third Party Library fuck
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -30,9 +30,9 @@ class AuthController extends MainController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $req)
-    {
-        // ================================================>> Data Validation
+    public function login(Request $req){
+
+        // ===>> Data Validation
         $this->validate($req,
             [
                 'username' => ['required'],
@@ -46,7 +46,7 @@ class AuthController extends MainController
             ]
         );
 
-        // ================================================>> Check Login
+        // ===>> Check Login
         $credentials = array(
             'phone'             =>  $req->username,
             'password'          =>  $req->password,
@@ -56,18 +56,26 @@ class AuthController extends MainController
 
         try {
 
+            // ===>> Set JWT Token Time To Live
             JWTAuth::factory()->setTTL(1200); //1200 នាទី
+
+            // ===>> Credentails comparation by JWTAuth in DB using table user
             $token = JWTAuth::attempt($credentials);
 
-            if (!$token) {
+            // ===>> Check if Token is not valid
+            if (!$token) { // Yes
+
+                // ===>> Failed Response Back to Client due to invalide username or password
                 return response()->json([
-                    'status' => 'error',
-                    'message' => 'ឈ្មោះអ្នកប្រើឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។'
+                    'status'    => 'error',
+                    'message'   => 'ឈ្មោះអ្នកប្រើឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។'
                 ], Response::HTTP_UNAUTHORIZED);
+
             }
 
         } catch (JWTException $e) {
 
+            // ===>> Failed Response Back to Client due to Server Errro
             return response()->json([
                 'status'    => 'បរាជ័យ',
                 'message'   => 'Cannot Login',
@@ -76,17 +84,19 @@ class AuthController extends MainController
 
         }
 
-        // ================================================>> Prepare Response Data
+        // ==>> Get Data from Auth App for User object
         $user = auth()->user();
+
+        // ===>> User Format
         $dataUser = [
             'id'        => $user->id,
             'name'      => $user->name,
             'email'     => $user->email,
             'avatar'    => $user->avatar,
             'phone'     => $user->phone
-
         ];
-        // ================================================>> Check Role
+
+        // ====> Check Role
         $role = '';
         if ($user->type_id == 2) { //
             $role = 'Staff';
@@ -94,7 +104,7 @@ class AuthController extends MainController
             $role = 'Admin';
         }
 
-        // ================================================>> Response Back to Client
+        // ===>> Success Response Back to Client
         return response()->json([
             'access_token'  => $token,
             'token_type'    => 'bearer',
@@ -113,7 +123,10 @@ class AuthController extends MainController
      */
     public function logout()
     {
+        // ===>> Make Application Logout
         auth()->logout();
+
+        // ===>> Success Response Back to Client
         return response()->json(['message' => 'Successfully logged out'], 200);
     }
 

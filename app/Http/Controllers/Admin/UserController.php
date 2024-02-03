@@ -35,8 +35,11 @@ class UserController extends MainController
 
     public function getData(Request $req){
 
-        // ===>> Get Data from Database
-        $data = User::select('id', 'name', 'phone', 'email', 'type_id', 'avatar', 'created_at', 'is_active')->with(['type']);
+        // ===>> Get Data from DB
+        $data = User::select('id', 'name', 'phone', 'email', 'type_id', 'avatar', 'created_at', 'is_active')
+        ->with([
+            'type' // M:1
+        ]);
 
         // ===>>> Filter
         // By Key for Name or Phone Number

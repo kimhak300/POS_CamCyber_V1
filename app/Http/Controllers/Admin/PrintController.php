@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 // ============================================================================>> Core Library
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http; // Handling HTTP Request to other service
 
 // ============================================================================>> Custom Library
 // Controller
@@ -14,7 +14,7 @@ use App\Models\Order\Order;
 
 class PrintController extends MainController
 {
-    //====================Global variable====================
+    //==================== Public Variable ====================
     private $JS_BASE_URL;
     private $JS_USERNAME;
     private $JS_PASSWORD;
@@ -22,30 +22,37 @@ class PrintController extends MainController
 
     public function __construct()
     {
+        // ===>> Get JS Report Configration from ENV
         $this->JS_BASE_URL   = env('JS_BASE_URL');
         $this->JS_USERNAME   = env('JS_USERNAME');
         $this->JS_PASSWORD   = env('JS_PASSWORD');
         $this->JS_TEMPLATE   = env('JS_TEMPLATE');
     }
 
-    public function printInvioceOrder($receipt_number = 0)
-    {
+    public function printInvioceOrder($receiptNumber = 0){
         try {
-            $body = [
+
+            // Payload to be sent to JS Report Service
+            $payload = [
                 "template" => [
                     "name" => $this->JS_TEMPLATE, // name or path
                 ],
-                "data" => $this->getData($receipt_number),
+                "data" => $this->_getReceiptData($receiptNumber),
             ];
 
-            $response = Http::withBasicAuth($this->JS_USERNAME, $this->JS_PASSWORD)->withHeaders([
+            // ===>> Send Request ot JS Report Service
+            $response = Http::withBasicAuth($this->JS_USERNAME, $this->JS_PASSWORD)
+            ->withHeaders([
                 'Content-Type' => 'application/json',
-            ])->post($this->JS_BASE_URL . '/api/report', $body);
+            ])
+            ->post($this->JS_BASE_URL . '/api/report', $payload);
 
+            // ===> Success Response Back to Client
             return [
-                'file_base64' => base64_encode($response),
-                'error' => '',
+                'file_base64'   => base64_encode($response),
+                'error'         => '',
             ];
+
         } catch (\Exception $e) {
             // Handle the exception
             return [
@@ -55,36 +62,45 @@ class PrintController extends MainController
         }
     }
 
-    public static function getData($receipt_number = 0)
-    {
-        try {
-            $data = Order::select('id', 'receipt_number', 'cashier_id', 'total_price', 'ordered_at')
-                ->where('receipt_number', $receipt_number)
-                ->with([
-                    'cashier',
-                    'details'
-                ])
-                ->orderBy('id', 'desc')
-                ->get();
+    private function _getReceiptData($receiptNumber = 0){
 
-            $total = 0;
+        try {
+
+            // ===>> Get Data from DB
+            $receipt = Order::select('id', 'receiptNumber', 'cashier_id', 'total_price', 'ordered_at')
+            ->with([
+                'cashier', // M:1
+                'details' // 1:M
+            ])
+            ->where('receiptNumber', $receiptNumber) // Condition
+            ->orderBy('id', 'desc') // Order
+            ->get();
+
+            // ===>> Find Total Price
+            $totalPrice = 0;
             foreach ($data as $row) {
-                $total += $row->total_price;
+                $totalPrice += $row->total_price;
             }
 
+            // ===>> Prepare Format
             $payload = [
-                'total' => $total,
-                'data'  => $data,
+                'total' => $totalPrice,
+                'data'  => $receipt,
             ];
 
+            // Return data Back
             return $payload;
+
         } catch (\Exception $e) {
-            // Handle the exception
+
+            // ===> Handle the exception
             return [
                 'total' => 0,
                 'data' => [],
                 'error' => $e->getMessage(),
             ];
+
         }
     }
+
 }

@@ -27,17 +27,18 @@ class POSController extends MainController
 {
     public function getProducts()
     {
+        // ===>> Get products group by Product type from DB
         $data = ProductType::select('id', 'name')
             ->with([
-                'products:id,name,image,type_id,unit_price'
-            ])
-            ->get();
+            'products:id,name,image,type_id,unit_price' // 1:M
+        ])
+        ->get();
 
+        // ===> Success Response Back to Client
         return response()->json($data, Response::HTTP_OK);
     }
 
-    public function makeOrder(Request $req)
-    {
+    public function makeOrder(Request $req){
 
         //==============================>> Check validation
         $this->validate($req, [
@@ -84,40 +85,50 @@ class POSController extends MainController
 
         // ===> Get Data for Client Reponse to view the order in Popup.
         $orderData = Order::select('*')
-            ->with([
+        ->with([
 
-                'cashier:id,name,type_id',
-                'cashier.type:id,name',
+            'cashier:id,name,type_id', // M:1
+            'cashier.type:id,name',  // M:1
 
-                'details:id,order_id,product_id,unit_price,qty',
-                'details.product:id,name,type_id',
-                'details.product.type:id,name'
+            'details:id,order_id,product_id,unit_price,qty', // 1:M
+            'details.product:id,name,type_id', // M:1 (order_details -> product)
+            'details.product.type:id,name'  // M:1 (product -> products_type)
 
-            ])
-            ->find($order->id);
+        ])
+        ->find($order->id);
 
         // ===>> Send Notification
         $this->_sendNotification($orderData);
 
+        // ===> Success Response Back to Client
         return response()->json([
             'order'         => $orderData,
             'message'       => 'ការបញ្ជាទិញត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
+
     }
 
-    private function _generateReceiptNumber()
-    {
+    private function _generateReceiptNumber(){
+
+        // ===>> Generate 6 Random Number bigger than 1000000 and smaller than 9999999
         $number = rand(1000000, 9999999);
-        $check  = Order::where('receipt_number', $number)->first();
-        if ($check) {
+
+        // ===>> Get Data from DB the random number
+        $data  = Order::where('receipt_number', $number)->first();
+
+        // ===>> Check if the number exist in th DB record
+        if ($data) { // Yes exist
+
+            // ===>> Check Again
             return $this->_generateReceiptNumber();
         }
 
+        // ===>> Return the unique number back
         return $number;
     }
 
-    private function _sendNotification($orderData)
-    {
+    private function _sendNotification($orderData){
+
         // Send Telegram Notification
         $htmlMessage = "<b>ការបញ្ជាទិញទទួលបានជោគជ័យ!</b>\n";
         $htmlMessage .= "- លេខវិកយប័ត្រ៖ " . $orderData->receipt_number . "\n";
@@ -143,7 +154,6 @@ class POSController extends MainController
         $htmlMessage .= "<b>* សរុបទាំងអស់៖</b> $totalProducts ទំនិញ $orderData->total_price ៛\n";
         $htmlMessage .= "- កាលបរិច្ឆេទ: " . $orderData->ordered_at;
 
-        //=================================
         TelegramService::sendMessage($htmlMessage);
     }
 }
