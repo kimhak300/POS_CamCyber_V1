@@ -45,7 +45,7 @@
 
 <body>
     <div class="d-flex p-4">
-        <h2>POS API</h2>
+        <h2>This API has been hack</h2>
         <p>Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})</p>
     </div>
 </body>
