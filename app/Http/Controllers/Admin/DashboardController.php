@@ -14,14 +14,14 @@ use App\Models\Order\Order;
 
 class DashboardController extends MainController
 {
-    public function getDashboardInfo()
-    {
+    public function getDashboardInfo(){
+
         // ===>> Get order data from DB and sum total_price using Function Sum
         $totalSaleToday = Order::sum('total_price');
 
         // ===>> Prepare response format
         $data = [
-            'total_sale_today' => $totalSaleToday
+            'total_sale_today'      => $totalSaleToday
         ];
 
         // ===>> Success Response Back to Client

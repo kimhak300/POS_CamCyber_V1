@@ -31,21 +31,18 @@ Route::group(['prefix' => 'sales'], function () {
 // ===========================================================================>> Product
 Route::group(['prefix' => 'products'], function () {
 
+    // ===>> Product Type
+    Route::get('/types',        [ProductTypeController::class, 'getData']); // Read Multi Records
+    Route::post('/types',       [ProductTypeController::class, 'create']); // Create New Record
+    Route::post('/types/{id}',   [ProductTypeController::class, 'update']); // Update
+    Route::delete('/types/{id}', [ProductTypeController::class, 'delete']); // Delete a Record
+
+    // ===>> Product
     Route::get('/',        [ProductController::class, 'getData']); // Read Multi Records
     Route::get('/{id}',    [ProductController::class, 'view']); // View a Record
     Route::post('/',       [ProductController::class, 'create']); // Create New Record
     Route::post('/{id}',   [ProductController::class, 'update']); // Update
     Route::delete('/{id}', [ProductController::class, 'delete']); // Delete a Record
-
-    //================================================>> Product Type
-    Route::group(['prefix' => 'types'], function () {
-
-        Route::get('/',        [ProductTypeController::class, 'getData']); // Read Many Records
-        Route::post('/',       [ProductTypeController::class, 'create']); // Create New Record
-        Route::post('/{id}',   [ProductTypeController::class, 'update']); // Update
-        Route::delete('/{id}', [ProductTypeController::class, 'delete']); // Delete a Record
-
-    });
 
 });
 

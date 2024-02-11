@@ -1,112 +1,116 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
-// ============================================================================>> Core Library
-use Illuminate\Http\Request; // For Getting requested Data from Client
-use Illuminate\Http\Response; // For Responsing data back to Client
+//=============================================================================>> Core Library
+use Illuminate\Http\Request;            // for getting data form client
+use Illuminate\Http\Response;           // for returning data back to client
 
-// ============================================================================>> Third Library
-use Tymon\JWTAuth\Facades\JWTAuth; // Get Current Logged User
+//=============================================================================>> Third Party Library
 
-// ============================================================================>> Core Library
-// Controller
+//=============================================================================>> Custom Library
 use App\Http\Controllers\MainController;
+use App\Models\Product\Type;           // for getting Type data form database
+
 class ProductTypeController extends MainController
 {
-    public function getData(){
-        
-        $data = Type::select("id","name") -> get();
+    public function getData()
+    {
+        $data = Type::select("*")
+        // ->with([
+        //     'products:id,Type_id,name,image'
+        // ])
+        ->withCount([
+            'products as n_of_products'
+        ])
+        ->orderBy('id', 'DESC')
+        ->get();
         return $data;
-
     }
-    public function create(Request $req){
-        
-        // ===>> Check Validation
-        $this->validate($req, [
-            'name'      => 'required'
-        ]);
 
-        // ===>> Save Data to DB
-        $data = new Type;
-        $data->name = $req->name;
+    public function create(Request $req)
+    {
+        //==============================>> Check validation
+        $this->validate(
+            $req,
+            [
+                'name'             => 'required|max:20',
+            ],
+            [
+                'name.required'    => 'សូមបញ្ចូលឈ្មោះម៉ាកផលិតផល',
+                'name.max'         => 'ឈ្មោះម៉ាកផលិតផលមិនអាចលើសពី២០ខ្ទង់',
+            ]
+        );
+
+        //==============================>> Start Adding data
+        $data           =   new Type;
+        $data->name     =   $req->name;
         $data->save();
-    
-        // ===>> Response back to Client
+
         return response()->json([
-            'data'         => $data,
-            'message'       => 'Data has been successfully created.'
+            'data'          => $data,
+            'message'       => 'ទិន្នន័យត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
-    
-    
-    
     }
 
-    public function update(Request $req, $id){
-        // ===>> Check Validation
-        $this->validate($req, [
-            'name'      => 'required'
-        ]);
+    public function update(Request $req, $id = 0)
+    {
+        //==============================>> Check validation
+        $this->validate(
+            $req,
+            [
+                'name'             => 'required|max:20',
+            ],
+            [
+                'name.required'    => 'សូមបញ្ចូលឈ្មោះម៉ាកផលិតផល',
+                'name.max'         => 'ឈ្មោះម៉ាកផលិតផលមិនអាចលើសពី២០ខ្ទង់',
+            ]
+        );
 
-        // ===>> Find Record In Db requested from client
-        $data = Type::find($id);
+        //==============================>> Start updating data
+        $data           =   Type::find($id);
 
-        // ===>> Check If Data is correct
-        if ($data){// Yes
+        if ($data) {
 
-            // ===>> Save Data to DB
-            $data->name = $req->name;
+            $data->name     =   $req->name;
             $data->save();
 
-            // ===>> Success Response back to client
             return response()->json([
-                'data'         => $data,
-                'message'       => 'Data has been successfully updated.'
+                'status'        => 'ជោគជ័យ',
+                'message'       => 'ប្រភេទផលិតផលត្រូវបានកែប្រែជោគជ័យ!',
+                'data'          => $data,
             ], Response::HTTP_OK);
 
-         } else{ // No
-            
-            // ===>> Failed Response Back to Client
+        }else {
+
             return response()->json([
                 'status'    => 'បរាជ័យ',
-                'message'   => 'ទិន្នន័យដែលផ្តល់ឲ្យមិនត្រូវទេ',
+                'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
             ], Response::HTTP_BAD_REQUEST);
 
-      }
-        
+        }
     }
 
-    public function delete(Request $req, $id){
-        // ===>> Check Validation
-        $this->validate($req, [
-            'name'      => 'required'
-        ]);
+    public function delete($id)
+    {
+        $data           =   Type::find($id);
 
-        // ===>> Find eecord in DB requested from client
-        $data = Type::find($id);
+        if ($data) {
 
-        // ===>> Check if data is correct
-        if ($data){// Yes
-
-            // ===>> Delete data from DB
-            $data->name = $req->name;
             $data->delete();
 
-            // ===>> Success response back to client
             return response()->json([
-                'data'         => $data,
-                'message'       => 'Data has been successfully deleted.'
+                'status'        => 'ជោគជ័យ',
+                'message'       => 'data has been deleted!',
             ], Response::HTTP_OK);
 
-         } else{ // No
-            
-            // ===>> Failed Response Back to Client
+        }else {
+
             return response()->json([
                 'status'    => 'បរាជ័យ',
-                'message'   => 'ទិន្នន័យដែលផ្តល់ឲ្យមិនត្រូវទេ',
+                'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
             ], Response::HTTP_BAD_REQUEST);
 
-      }
-        
+        }
     }
-
 }
