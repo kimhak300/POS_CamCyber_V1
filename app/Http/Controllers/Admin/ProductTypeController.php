@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 //=============================================================================>> Core Library
-use Illuminate\Http\Request;            // for getting data form client
+use Illuminate\Http\Request;            // for getting Payload form client
 use Illuminate\Http\Response;           // for returning data back to client
 
 //=============================================================================>> Third Party Library
