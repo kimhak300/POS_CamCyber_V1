@@ -26,13 +26,13 @@ class ProductTypeController extends MainController
         ]);
 
         // ===>> Filter data
-        if ($req->key && $req->key != ''){ 
+        if ($req->key && $req->key != ''){
             $data = $data->where('name', 'LIKE', '%'.$req->key.'%'); //search by key
         }
 
         // ===>> Get data from DB
         $data = $data->orderBy('id', 'DESC')
-        ->get(); 
+        ->get();
 
         // ===>> Return data to client
         return $data;
@@ -40,7 +40,7 @@ class ProductTypeController extends MainController
 
     public function create(Request $req)
     {
-        //==============================>> Check validation
+        // ===>> Check validation
         $this->validate(
             $req,
             [
@@ -65,7 +65,7 @@ class ProductTypeController extends MainController
 
     public function update(Request $req, $id = 0)
     {
-        //==============================>> Check validation
+        // ===>> Check validation
         $this->validate(
             $req,
             [

@@ -9,7 +9,7 @@ use Illuminate\Http\Response; // For Responsing data back to Client
 // ============================================================================>> Third Library
 use Tymon\JWTAuth\Facades\JWTAuth; // Get Current Logged User
 
-// ============================================================================>> Core Library
+// ============================================================================>> Custom Library
 // Controller
 use App\Http\Controllers\MainController;
 
@@ -20,14 +20,14 @@ use App\Services\TelegramService; //Send Notifications to Telegram Bot
 use App\Models\Order\Detail;
 use App\Models\Order\Order;
 use App\Models\Product\Product;
-use App\Models\Product\Type as ProductType;
+use App\Models\Product\Type as ProductType; // Rename
 
 
 class POSController extends MainController
 {
-    public function getProducts()
-    {
-        // ===>> Get products group by Product type from DB
+    public function getProducts(){
+
+        // ===>> Get Data from DB (group by Product type from DB)
         $data = ProductType::select('id', 'name')
             ->with([
             'products:id,name,image,type_id,unit_price' // 1:M
@@ -36,11 +36,12 @@ class POSController extends MainController
 
         // ===> Success Response Back to Client
         return response()->json($data, Response::HTTP_OK);
+
     }
 
     public function makeOrder(Request $req){
 
-        //==============================>> Check validation
+        // ===>> Check validation
         $this->validate($req, [
             'cart'      => 'required|json'
         ]);
