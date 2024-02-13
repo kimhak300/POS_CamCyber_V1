@@ -29,7 +29,8 @@ class PrintController extends MainController
         $this->JS_TEMPLATE   = env('JS_TEMPLATE');
     }
 
-    public function printInvioceOrder($receiptNumber = 0){
+    public function printInvoice($receiptNumber = 0){
+
         try {
 
             // Payload to be sent to JS Report Service
@@ -50,13 +51,13 @@ class PrintController extends MainController
             // ===> Success Response Back to Client
             return [
                 'file_base64'   => base64_encode($response),
-                'error'         => '',
+                'error'         => 'No',
             ];
 
         } catch (\Exception $e) {
             // Handle the exception
             return [
-                'file_base64' => '',
+                'file_base64' => 'X',
                 'error' => $e->getMessage(),
             ];
         }
@@ -67,25 +68,18 @@ class PrintController extends MainController
         try {
 
             // ===>> Get Data from DB
-            $receipt = Order::select('id', 'receiptNumber', 'cashier_id', 'total_price', 'ordered_at')
+            $data = Order::select('id', 'receipt_number', 'cashier_id', 'total_price', 'ordered_at')
             ->with([
                 'cashier', // M:1
                 'details' // 1:M
             ])
-            ->where('receiptNumber', $receiptNumber) // Condition
-            ->orderBy('id', 'desc') // Order
+            ->where('receipt_number', $receiptNumber) // Condition
             ->get();
-
-            // ===>> Find Total Price
-            $totalPrice = 0;
-            foreach ($data as $row) {
-                $totalPrice += $row->total_price;
-            }
 
             // ===>> Prepare Format
             $payload = [
-                'total' => $totalPrice,
-                'data'  => $receipt,
+                'total' => $data[0]->total_price,
+                'data'  => $data,
             ];
 
             // Return data Back
