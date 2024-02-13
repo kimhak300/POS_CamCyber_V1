@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-// ============================================================================>> Core Library
+// =================================================>> Core Library
 use Illuminate\Http\Response; // For Responsing data back to Client
 
 // ============================================================================>> Custom Library
@@ -26,5 +26,6 @@ class DashboardController extends MainController
 
         // ===>> Success Response Back to Client
         return response()->json($data, Response::HTTP_OK);
+
     }
 }

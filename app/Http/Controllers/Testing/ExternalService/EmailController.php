@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ExternalService;
 
 use App\Mail\ResetPassword;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
-class EmailController extends Controller
+class EmailController
 {
     //Just test implementation for send the eamil
     public function sendEmail(Request $request)

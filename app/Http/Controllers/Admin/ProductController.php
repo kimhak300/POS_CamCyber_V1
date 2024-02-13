@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 // ============================================================================>> Core Library
-use Illuminate\Http\Request; // For Getting requested Data from Client
+use Illuminate\Http\Request; // For Getting requested Payload from Client
 use Illuminate\Http\Response; // For Responsing data back to Client
 
-// ============================================================================>> Third Party Library
+// ============================================================================>> Third Party Library កខគឃង
 use Carbon\Carbon; // Data Time format & Calculation
 
 // ============================================================================>> Custome Library
@@ -21,45 +21,62 @@ use App\Models\Product\Product;
 
 class ProductController extends MainController
 {
-    public function getData(Request $req)
-    {
+    public function getData(Request $req){
+
+        // Declar Variable
         $data = Product::select('*')
         ->with(['type'])
         ;
-        //Filter
+
+        // ===>> Filter Data
+        // By Key compared with Code or Name
         if ($req->key && $req->key != '') {
-            $data = $data->where('code', 'LIKE', '%' . $req->key . '%')->Orwhere('name', 'LIKE', '%' . $req->key . '%');
+
+            $data = $data->where('code', 'LIKE', '%' . $req->key . '%')
+            ->Orwhere('name', 'LIKE', '%' . $req->key . '%');
         }
 
+        // By Product Type
         if ($req->type && $req->type != 0) {
+
             $data = $data->where('type_id', $req->type);
+
         }
 
-        $data = $data->orderBy('id', 'desc')->paginate($req->limit ? $req->limit : 10,'per_page');
+        $data = $data->orderBy('id', 'desc') // Order Data by Giggest ID to small
+        ->paginate($req->limit ? $req->limit : 10,'per_page'); // Paginate Data
+
+        // ===> Success Response Back to Client
         return response()->json($data, Response::HTTP_OK);
 
     }
 
-    public function view($id = 0)
-    {
-        $data = Product::select('*')->find($id);
-        if($data){
+    public function view($id = 0){
 
+        // Find record from DB
+        $data = Product::select('*')->find($id);
+
+        // ===>> Check if data is valide
+        if ($data) { // Yes
+
+            // ===> Success Response Back to Client
             return response()->json($data, Response::HTTP_OK);
 
-        }else{
+        } else { // No
 
+            // ===> Failed Response Back to Client
             return response()->json([
-                'status'    => 'fil',
-                'message'   => 'គ្មានទិន្ន័យ',
+                'status'    => 'បរាជ័យ',
+                'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
             ], Response::HTTP_BAD_REQUEST);
+
         }
 
     }
 
-    public function create(Request $req)
-    {
-        //==============================>> Check validation
+    public function create(Request $req){
+
+        // ===>> Check validation
         $this->validate(
             $req,
             [
@@ -83,36 +100,49 @@ class ProductController extends MainController
             ]
         );
 
-        //==============================>> Start Saving Data to Database
+        // ===>> Create Product
+        // Map field of table in DB Vs. requested value from client
         $product                =   new Product;
         $product->name          =   $req->name;
         $product->code          =   $req->code;
         $product->type_id       =   $req->type_id;
         $product->unit_price    =   $req->unit_price;
+
+        // ===>> Save To DB
         $product->save();
 
-        //==============================>> Start Uploading Image to File Server
+        // ===>> Image Upload
         if ($req->image) {
-            // Need to create folder before storing images
-            $folder = Carbon::today()->format('d') . '-' . Carbon::today()->format('M') . '-' . Carbon::today()->format('Y');
-            $image  = FileUpload::uploadFile($req->image, 'products/' . $folder, $req->fileName);
 
-            //if ($image['url']) {
-                $product->image = $image['url'];
+            // Need to create folder before storing images
+            $folder = Carbon::today()->format('d-m-y');
+
+            // ===>> Send to File Service
+            $image  = FileUpload::uploadFile($req->image, 'products/', $req->fileName);
+
+            // ===>> Check if image has been successfully uploaded
+            if ($image['url']) {
+
+                // Map field of table in DB Vs. uri from File Service
+                $product->image     = $image['url'];
+
+                // ===>> Save to DB
                 $product->save();
-            //}
+
+            }
         }
 
+        // ===> Success Response Back to Client
         return response()->json([
             'data'      =>  Product::select('*')->with(['type'])->find($product->id),
             'message'   => 'ផលិតផលត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
+
     }
 
-    public function update(Request $req, $id = 0)
-    {
-        // return "Yes";
-        //==============================>> Check validation
+    public function update(Request $req, $id = 0){
+
+        // ===>> Check validation
         $this->validate(
             $req,
             [
@@ -131,35 +161,38 @@ class ProductController extends MainController
             ]
         );
 
-        //==============================>> Start Updating data
-        $product                         = Product::find($id);
-        if ($product) {
+        // ===>> Update Product
+        // Find record from DB
+        $product                    = Product::find($id);
 
+        // ===>> Check if data is valide
+        if ($product) { //Yes
+
+            // Map field of table in DB Vs. requested value from client
             $product->name          = $req->name;
             $product->code          = $req->code;
             $product->type_id       = $req->type_id;
             $product->unit_price    = $req->unit_price;
 
-            // Save to DB
+            // ===>> Save to DB
             $product->save();
 
-
-            // Image Upload
+            // ===>> Image Upload
             if ($req->image) {
 
                 // Need to create folder before storing images
-                //$folder = Carbon::today()->format('d') . '-' . Carbon::today()->format('M') . '-' . Carbon::today()->format('Y');
                 $folder = Carbon::today()->format('d-m-y');
 
-                //return $folder;
-
+                // ===>> Send to File Service
                 $image  = FileUpload::uploadFile($req->image, 'products/', $req->fileName);
 
-                //return $image;
-
+                // ===>> Check if image has been successfully uploaded
                 if ($image['url']) {
 
+                    // Map field of table in DB Vs. uri from File Service
                     $product->image     = $image['url'];
+
+                    // ===>> Save to DB
                     $product->save();
 
                 }
@@ -172,14 +205,16 @@ class ProductController extends MainController
             ])
             ->find($product->id);
 
+            // ===> Success Response Back to Client
             return response()->json([
                 'status'    => 'ជោគជ័យ',
                 'message'   => 'ផលិតផលត្រូវបានកែប្រែជោគជ័យ',
                 'product'   => $product,
             ], Response::HTTP_OK);
 
-        } else {
+        } else { // No
 
+            // ===> Failed Response Back to Client
             return response()->json([
 
                 'status'    => 'បរាជ័យ',
@@ -188,26 +223,34 @@ class ProductController extends MainController
             ], Response::HTTP_BAD_REQUEST);
 
         }
+
     }
 
-    public function delete($id = 0)
-    {
+    public function delete($id = 0){
+
+        // Find record from DB
         $data = Product::find($id);
 
-        //==============================>> Start deleting data
-        if ($data) {
+        // ===>> Check if data is valide
+        if ($data) { // Yes
 
+            // ===>> Delete Data from DB
             $data->delete();
+
+            // ===> Success Response Back to Client
             return response()->json([
                 'status'    => 'ជោគជ័យ',
                 'message'   => 'ទិន្នន័យត្រូវបានលុប',
             ], Response::HTTP_OK);
 
-        } else {
+        } else { // No
+
+            // ===> Failed Response Back to Client
             return response()->json([
                 'status'    => 'បរាជ័យ',
                 'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
             ], Response::HTTP_BAD_REQUEST);
+
         }
     }
 }
