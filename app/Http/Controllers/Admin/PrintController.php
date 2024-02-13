@@ -78,7 +78,7 @@ class PrintController extends MainController
 
             // ===>> Find Total Price
             $totalPrice = 0;
-            foreach ($data as $row) {
+            foreach ($receipt as $row) {
                 $totalPrice += $row->total_price;
             }
 

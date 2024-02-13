@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PrintController;
 
 // ===========================================================================>> Dashboard
 Route::get('/dashboard', [DashboardController::class, 'getDashboardInfo']);
@@ -24,7 +25,7 @@ Route::group(['prefix' => 'sales'], function () {
 
     Route::get('/',                         [SaleController::class, 'getData']);
     Route::delete('/{id}',                  [SaleController::class, 'delete']);
-    Route::get('/print/{receipt_number}',   [PrintController::class, 'printInvoice']);
+    Route::get('/print/{receipt_number}',   [PrintController::class, 'printInvioceOrder']);
 
 });
 
