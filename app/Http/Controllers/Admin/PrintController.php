@@ -51,13 +51,13 @@ class PrintController extends MainController
             // ===> Success Response Back to Client
             return [
                 'file_base64'   => base64_encode($response),
-                'error'         => 'No',
+                'error'         => '',
             ];
 
         } catch (\Exception $e) {
             // Handle the exception
             return [
-                'file_base64' => 'X',
+                'file_base64' => '',
                 'error' => $e->getMessage(),
             ];
         }
