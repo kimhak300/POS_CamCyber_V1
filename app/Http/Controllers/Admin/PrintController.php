@@ -73,16 +73,10 @@ class PrintController extends MainController
                 'details' // 1:M
             ])
             ->where('receipt_number', $receiptNumber) // Condition
-            ->get();
-
-            // ===>> Prepare Format
-            $payload = [
-                'total' => $data[0]->total_price,
-                'data'  => $data,
-            ];
+            ->first();
 
             // Return data Back
-            return $payload;
+            return $data;
 
         } catch (\Exception $e) {
 
