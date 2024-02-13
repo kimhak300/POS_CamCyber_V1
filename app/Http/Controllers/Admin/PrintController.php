@@ -26,7 +26,6 @@ class PrintController extends MainController
         $this->JS_BASE_URL   = env('JS_BASE_URL');
         $this->JS_USERNAME   = env('JS_USERNAME');
         $this->JS_PASSWORD   = env('JS_PASSWORD');
-        $this->JS_TEMPLATE   = env('JS_TEMPLATE');
     }
 
     public function printInvoice($receiptNumber = 0){
@@ -36,7 +35,7 @@ class PrintController extends MainController
             // Payload to be sent to JS Report Service
             $payload = [
                 "template" => [
-                    "name" => $this->JS_TEMPLATE, // name or path
+                    "name" => '/Invoice/main',
                 ],
                 "data" => $this->_getReceiptData($receiptNumber),
             ];
