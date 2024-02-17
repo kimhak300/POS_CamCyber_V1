@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\PrintController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductTypeController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\PrintController;
 
 // ===========================================================================>> Dashboard
 Route::get('/dashboard', [DashboardController::class, 'getDashboardInfo']);
