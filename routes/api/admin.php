@@ -26,7 +26,7 @@ Route::group(['prefix' => 'sales'], function () {
 
     Route::get('/',                         [SaleController::class, 'getData']);
     Route::delete('/{id}',                  [SaleController::class, 'delete']);
-    Route::get('/print/{receipt_number}',   [PrintController::class, 'printInvoice']);
+    Route::get('/print/{receipt_number}',   [PrintController::class, 'printInvoiceOrder']);
 
 });
 
