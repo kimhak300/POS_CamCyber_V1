@@ -19,11 +19,15 @@ class PrintController extends MainController
         $this->JS_BASE_URL   = env('JS_BASE_URL');
         $this->JS_USERNAME   = env('JS_USERNAME');
         $this->JS_PASSWORD   = env('JS_PASSWORD');
-        $this->JS_TEMPLATE   = env('JS_TEMPLATE');
     }
 
+<<<<<<< HEAD
     public function printInvoiceOrder($receiptNumber = 0)
     {
+=======
+    public function printInvoice($receiptNumber = 0){
+
+>>>>>>> 816c20262944524ca5d18426267460bd47c222f0
         try {
             // Construct the URL
             $baseUrl = rtrim($this->JS_BASE_URL, '/');
@@ -51,11 +55,15 @@ class PrintController extends MainController
             // Prepare Payload for JS Report Service
             $payload = [
                 "template" => [
+<<<<<<< HEAD
                     "name" => $this->JS_TEMPLATE,
                 ],
                 "data" => [
                     'total' => $totalPrice,
                     'data'  => $receipt,
+=======
+                    "name" => '/Invoice/main',
+>>>>>>> 816c20262944524ca5d18426267460bd47c222f0
                 ],
             ];
 
@@ -80,4 +88,35 @@ class PrintController extends MainController
         }
     }
 
+<<<<<<< HEAD
+=======
+    private function _getReceiptData($receiptNumber = 0){
+
+        try {
+
+            // ===>> Get Data from DB
+            $data = Order::select('id', 'receipt_number', 'cashier_id', 'total_price', 'ordered_at')
+            ->with([
+                'cashier', // M:1
+                'details' // 1:M
+            ])
+            ->where('receipt_number', $receiptNumber) // Condition
+            ->first();
+
+            // Return data Back
+            return $data;
+
+        } catch (\Exception $e) {
+
+            // ===> Handle the exception
+            return [
+                'total' => 0,
+                'data' => [],
+                'error' => $e->getMessage(),
+            ];
+
+        }
+    }
+
+>>>>>>> 816c20262944524ca5d18426267460bd47c222f0
 }
