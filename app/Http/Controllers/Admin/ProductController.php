@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 // ============================================================================>> Core Library
 use Illuminate\Http\Request; // For Getting requested Payload from Client
 use Illuminate\Http\Response; // For Responsing data back to Client
+use Illuminate\Pagination\Paginator;
+
 
 // ============================================================================>> Third Party Library កខគឃង
 use Carbon\Carbon; // Data Time format & Calculation
@@ -251,6 +253,61 @@ class ProductController extends MainController
                 'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
             ], Response::HTTP_BAD_REQUEST);
 
+        }
+    }
+
+
+
+    public function getProduct($id = 0, Request $req){
+        try {
+            // Fetch a specific product by ID
+            $product = Product::with(['orderDetails.order'])
+                ->find($id);
+            if (!$product) {
+                // Return an error response if the product is not found
+                return response()->json(['error' => 'Product not found.'], Response::HTTP_NOT_FOUND);
+            }
+
+             // ===>> Date Range
+            // Date Range Filter
+        if ($req->from && $req->to && $this->_isValidDate($req->from) && $this->_isValidDate($req->to)) {
+            $product->orderDetails = $product->orderDetails->filter(function ($orderDetail) use ($req) {
+                $orderedAt = strtotime($orderDetail->order->ordered_at);
+                $fromTimestamp = strtotime($req->from . " 00:00:00");
+                $toTimestamp = strtotime($req->to . " 23:59:59");
+                return $orderedAt >= $fromTimestamp && $orderedAt <= $toTimestamp;
+            });
+        }
+
+            // Filter by receipt number if it's provided in the request
+            if ($req->has('receipt_number') && $req->filled('receipt_number')) {
+                $product->orderDetails = $product->orderDetails->filter(function ($orderDetail) use ($req) {
+                    return $orderDetail->order->receipt_number == $req->input('receipt_number');
+                });
+            }
+
+            // Get the limit from the request or use a default of 10
+            $limit = $req->input('limit', 10);
+
+            // Paginate the orderDetails array with the specified limit
+            $orderDetails = new \Illuminate\Pagination\LengthAwarePaginator(
+                $product->orderDetails->values()->forPage($req->input('page', 1), $limit),
+                count($product->orderDetails),
+                $limit,
+                $req->input('page', 1)
+            );
+
+            // Append the paginated orderDetails to the product
+            $product->setRelation('orderDetails', $orderDetails);
+
+            // Return the product along with its paginated and ordered orderDetails
+            return response()->json($product, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            // Handle any exceptions, if needed
+            return response()->json([
+                'status'    => 'បរាជ័យ',
+                'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

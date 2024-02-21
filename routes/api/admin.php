@@ -45,6 +45,7 @@ Route::group(['prefix' => 'products'], function () {
     Route::post('/',       [ProductController::class, 'create']); // Create New Record
     Route::post('/{id}',   [ProductController::class, 'update']); // Update
     Route::delete('/{id}', [ProductController::class, 'delete']); // Delete a Record
+    Route::get('/transactions/{id}', [ProductController::class, 'getProduct']);
 
 });
 
