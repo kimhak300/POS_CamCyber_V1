@@ -7,6 +7,7 @@ WORKDIR /var/www
 # Increase Upload Max File Size
 COPY ./custom.ini /usr/local/etc/php/conf.d/custom.ini
 
+# Copy all code from Local Machine to Image
 COPY .  /var/www
 
 RUN rm -f composer.lock
