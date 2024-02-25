@@ -120,7 +120,7 @@ class ProductController extends MainController
             $folder = Carbon::today()->format('d-m-y');
 
             // ===>> Send to File Service
-            $image  = FileUpload::uploadFile($req->image, 'products/', $req->fileName);
+            $image  = FileUpload::uploadFile($req->image, 'products', $req->fileName);
 
             // ===>> Check if image has been successfully uploaded
             if ($image['url']) {
