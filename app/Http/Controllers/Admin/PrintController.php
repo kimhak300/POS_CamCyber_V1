@@ -24,10 +24,10 @@ class PrintController extends MainController
     public function printInvoiceOrder($receiptNumber = 0)
     {
         try {
-            // Construct the URL
-            $baseUrl = rtrim($this->JS_BASE_URL, '/');
-            $url = url("$baseUrl/api/report");
 
+            // URL Preparation
+
+            $url = $this->JS_BASE_URL."/api/report";
             // Debugging: Log the constructed URL
             info("Constructed URL: $url");
 
