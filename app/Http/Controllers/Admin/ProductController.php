@@ -102,7 +102,7 @@ class ProductController extends MainController
             ]
         );
 
-        // ===>> Create Product
+        // ===>> Field Mapping Product
         // Map field of table in DB Vs. requested value from client
         $product                =   new Product;
         $product->name          =   $req->name;
@@ -256,8 +256,6 @@ class ProductController extends MainController
         }
     }
 
-
-
     public function getProduct($id = 0, Request $req){
         try {
             // Fetch a specific product by ID
@@ -310,4 +308,5 @@ class ProductController extends MainController
             ], Response::HTTP_BAD_REQUEST);
         }
     }
+
 }
