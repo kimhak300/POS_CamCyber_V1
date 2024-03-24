@@ -136,7 +136,7 @@ class ProductController extends MainController
 
         // ===> Success Response Back to Client
         return response()->json([
-            'data'      =>  Product::select('*')->with(['type'])->find($product->id),
+            'data'      =>  $this->view($product->id),
             'message'   => 'ផលិតផលត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
 

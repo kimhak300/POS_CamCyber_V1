@@ -6,11 +6,8 @@ namespace App\Http\Controllers\Testing;
 use Illuminate\Http\Request; // For Getting requested Payload from Client
 use Illuminate\Http\Response; // For Responsing data back to Client
 
-// ============================================================================>> Custom Library
-// Controller
-use App\Http\Controllers\MainController;
 
-class TestingController extends Controller
+class TestingController
 {
     public function calculate(Request $req){
 
