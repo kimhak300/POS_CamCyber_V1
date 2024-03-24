@@ -34,6 +34,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function type(): BelongsTo //M:1
     {
-        return $this->belongsTo(Type::class, 'type_id','id');
+        return $this->belongsTo(Type::class, 'type_id');
+    }
+
+    public function orders(): HasMany //1:M
+    {
+        return $this->hasMany(Order::class, 'cashier_id');
     }
 }

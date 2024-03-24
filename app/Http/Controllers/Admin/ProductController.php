@@ -25,7 +25,7 @@ class ProductController extends MainController
 {
     public function getData(Request $req){
 
-        // Declar Variable
+        // Declare Variable
         $data = Product::select('*')
         ->with(['type'])
         ;

@@ -22,7 +22,8 @@ class Product extends Model
 
     public function type(): BelongsTo //M:1
     {
-        return $this->belongsTo(Type::class, 'type_id','id')->select('id', 'name');
+        return $this->belongsTo(Type::class, 'type_id','id')
+        ->select('id', 'name');
     }
 
     public function orderDetails(): HasMany // 1:M relationship with OrderDetail
