@@ -34,6 +34,6 @@ use Illuminate\Support\Facades\Route;
 
 
      // ==============================================>>  Test with Third Party via API
-    Route::group(['prefix' => 'test'], function () {
+    Route::group(['prefix' => 'testing'], function () {
         require(__DIR__ . '/api/test.php');
     });

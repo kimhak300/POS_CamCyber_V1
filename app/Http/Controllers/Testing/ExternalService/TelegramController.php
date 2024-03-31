@@ -16,22 +16,69 @@ class TelegramController
         // ===>> Get Credentail from ENV Variable
         $botToken  = env('TELEGRAM_BOT_TOKEN');
         $chatID    = env('TELEGRAM_CHAT_ID');
-
+        $chatID    = 229388689;
 
         // ===>> Send Request to Telegram
-        $res = Http::withOptions(['verify' => false])->get("https://api.telegram.org/bot$botToken/sendMessage?chat_id=$chatID&text=$req->msg");
+        $res = Http::get("https://api.telegram.org/$botToken/sendMessage", [
+            'chat_id' => $chatID,
+            'text' => $req->text
+        ]);
 
         // ===>> Success Response Back to Client
         return response()->json($res, Response::HTTP_OK);
 
     }
 
-    public function sendPicture(Request $req){
+    public function sendPhoto(Request $req){
+
+        // Check Validation
+        $req->validate([
+            'photo' => 'required|file|max:51200', //50MB
+        ]);
+
+
+
+        if($req->has('photo')){
+
+            // ===>> Get Credentail from ENV Variable
+            $botToken  = env('TELEGRAM_BOT_TOKEN');
+            $chatID    = 229388689;
+
+            // ===>> Send Request to Telegram
+            $res = Http::asForm()->post("https://api.telegram.org/$botToken/sendPhoto", [
+                'chat_id' => $chatID,
+                'photo' => $req->photo
+            ])
+            ;
+
+            // ===>> Success Response Back to Client
+            return response()->json($res, Response::HTTP_OK);
+
+        }else{
+            return $req;
+        }
+
+
+
+
 
     }
 
     public function sendLocation(Request $req){
 
+         // ===>> Get Credentail from ENV Variable
+         $botToken  = env('TELEGRAM_BOT_TOKEN');
+         $chatID    = env('TELEGRAM_CHAT_ID');
+
+         // ===>> Send Request to Telegram
+         $res = Http::get("https://api.telegram.org/$botToken/sendLocation", [
+             'chat_id'      => $chatID,
+             'latitude'     => $req->latitude,
+             'longitude'    => $req->longitude
+         ]);
+
+         // ===>> Success Response Back to Client
+         return response()->json($res, Response::HTTP_OK);
     }
 
 
