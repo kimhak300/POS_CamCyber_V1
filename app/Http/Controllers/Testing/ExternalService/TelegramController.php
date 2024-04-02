@@ -16,8 +16,8 @@ class TelegramController
         // ===>> Get Credentail from ENV Variable
         $botToken  = env('TELEGRAM_BOT_TOKEN');
         $chatID    = env('TELEGRAM_CHAT_ID');
-        $chatID    = 229388689;
-
+        $chatID    = -1002109105991;
+        
         // ===>> Send Request to Telegram
         $res = Http::get("https://api.telegram.org/$botToken/sendMessage", [
             'chat_id' => $chatID,
@@ -42,7 +42,8 @@ class TelegramController
 
             // ===>> Get Credentail from ENV Variable
             $botToken  = env('TELEGRAM_BOT_TOKEN');
-            $chatID    = 229388689;
+            $chatID    = env('TELEGRAM_CHAT_ID');
+            $chatID    = -1002109105991;
 
             // ===>> Send Request to Telegram
             $res = Http::asForm()->post("https://api.telegram.org/$botToken/sendPhoto", [
@@ -50,7 +51,11 @@ class TelegramController
                 'photo' => $req->photo
             ])
             ;
-
+            // Check for errors
+            if ($res->failed()) {
+                // Handle the error, log it, or return an error response
+                return response()->json(['error' => 'Failed to send photo'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
             // ===>> Success Response Back to Client
             return response()->json($res, Response::HTTP_OK);
 
