@@ -38,24 +38,25 @@ class PrintController extends MainController
                     'details' // 1:M
                 ])
                 ->where('receipt_number', $receiptNumber)
-                ->orderBy('id', 'desc')
-                ->get();
+                // ->orderBy('id', 'desc')
+                ->first();
 
             // Find Total Price
-            $totalPrice = 0;
-            foreach ($receipt as $row) {
-                $totalPrice += $row->total_price;
-            }
+            // $totalPrice = 0;
+            // foreach ($receipt as $row) {
+            //     $totalPrice += $row->total_price;
+            // }
 
             // Prepare Payload for JS Report Service
             $payload = [
                 "template" => [
                     "name" => $this->JS_TEMPLATE,
                 ],
-                "data" => [
-                    'total' => $totalPrice,
-                    'data'  => $receipt,
-                ],
+                // "data" => [
+                //     'total' => $totalPrice,
+                //     'data'  => $receipt,
+                // ],
+                'data'  => $receipt,
             ];
 
             // Send Request to JS Report Service
