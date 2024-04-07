@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Http; // For Calling External Service
 class TelegramController
 {
 
-    public static function sendMessage(Request $req){
+    public function sendMessage(Request $req){
 
         // ===>> Get Credentail from ENV Variable
         $botToken  = env('TELEGRAM_BOT_TOKEN');
         $chatID    = env('TELEGRAM_CHAT_ID');
-        $chatID    = 229388689;
 
         // ===>> Send Request to Telegram
         $res = Http::get("https://api.telegram.org/$botToken/sendMessage", [
