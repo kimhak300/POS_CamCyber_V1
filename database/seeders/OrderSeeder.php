@@ -18,11 +18,11 @@ class OrderSeeder extends Seeder
 
         // ===>> Create Order Records
         $data = [];
-        for ($i = 1; $i <= 1000; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
 
             $data[] = [
                 'receipt_number'    => $this->generateReceiptNumber(),
-                'cashier_id'        => rand(2, 5),
+                'cashier_id'        => 1,
                 'total_price'       => 0,
                 'ordered_at'        => Date('Y-m-d H:i:s')
             ];

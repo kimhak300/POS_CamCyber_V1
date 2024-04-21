@@ -12,7 +12,7 @@ class FileUpload
             'project'   => 'minimart',
             'file'      => $file,
             'folder'    => $folder,
-            'fileName'  => $fileName
+            'fileName'  => 'abc'
         ];
 
         $curl = curl_init();
