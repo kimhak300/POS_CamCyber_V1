@@ -116,8 +116,7 @@ class ProductController extends MainController
         // ===>> Image Upload
         if ($req->image) {
 
-            // Need to create folder before storing images
-            $folder = Carbon::today()->format('d-m-y');
+            //return $req->image;
 
             // ===>> Send to File Service
             $image  = FileUpload::uploadFile($req->image, 'products', $req->fileName);
@@ -136,7 +135,7 @@ class ProductController extends MainController
 
         // ===> Success Response Back to Client
         return response()->json([
-            'data'      =>  $this->view($product->id),
+            'data'      =>  $product,
             'message'   => 'ផលិតផលត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
 
