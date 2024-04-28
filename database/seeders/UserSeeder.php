@@ -21,7 +21,8 @@ class UserSeeder extends Seeder
         */
         DB::table('users_type')->insert(
             [
-                ['name' => 'Admin']
+                ['name' => 'Admin'],
+                ['name' => 'Staff'],
             ]
         );
         /*
@@ -41,11 +42,17 @@ class UserSeeder extends Seeder
                 'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at'    =>  Carbon::now()->format('Y-m-d H:i:s')
             ],
-
-<<<<<<< HEAD
-=======
-            ]
->>>>>>> 8f263181d1538d00f91cd807ef16c74ed76ffea6
+            [
+                'type_id'       => 2,
+                'email'         => 'www.vanhong168@gmail.com',
+                'phone'         => '060486849',
+                'password'      => bcrypt('123456'),
+                'is_active'     => 1,
+                'name'          => 'Roeun Sophat',
+                'avatar'        => 'static/icon/user.png',
+                'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at'    =>  Carbon::now()->format('Y-m-d H:i:s')
+            ],
         ];
 
         /*
