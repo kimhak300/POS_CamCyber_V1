@@ -21,8 +21,7 @@ class UserSeeder extends Seeder
         */
         DB::table('users_type')->insert(
             [
-                ['name' => 'Admin'],
-                ['name' => 'Staff'],
+                ['name' => 'Admin']
             ]
         );
         /*
@@ -43,6 +42,10 @@ class UserSeeder extends Seeder
                 'updated_at'    =>  Carbon::now()->format('Y-m-d H:i:s')
             ],
 
+<<<<<<< HEAD
+=======
+            ]
+>>>>>>> 8f263181d1538d00f91cd807ef16c74ed76ffea6
         ];
 
         /*

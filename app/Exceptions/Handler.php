@@ -194,6 +194,10 @@ class Handler extends ExceptionHandler
 | Handler by: Yim Klok
 |--------------------------------------------------------------------------
 |
+<<<<<<< HEAD
 | date: 22/02/2023. location: Manistry of Public Works and Transport - MPWT
+=======
+| date: 22/02/2023. location: Ministry of public works and transport - MPWT
+>>>>>>> 8f263181d1538d00f91cd807ef16c74ed76ffea6
 |
 */
