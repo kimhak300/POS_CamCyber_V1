@@ -8,7 +8,6 @@ import { LayoutComponent } from 'app/layout/layout.component';
 import { InitialDataResolver } from 'app/app.resolvers';
 
 export const appRoutes: Route[] = [
-
     // Redirect empty path to '/dashboards'
     { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
 
@@ -21,14 +20,17 @@ export const appRoutes: Route[] = [
         canActivate: [NoAuthGuard],
         component: LayoutComponent,
         data: {
-            layout: 'empty'
+            layout: 'empty',
         },
         children: [
             {
                 path: 'auth',
-                loadChildren: () => import('app/main/auth/auth.module').then(m => m.AuthModule),
+                loadChildren: () =>
+                    import('app/main/auth/auth.module').then(
+                        (m) => m.AuthModule
+                    ),
             },
-        ]
+        ],
     },
 
     // ============================>> Admin routes & authenticated users
@@ -40,18 +42,37 @@ export const appRoutes: Route[] = [
         },
         canActivate: [AuthGuard],
         children: [
-
             // =============================>> Dashboard
             {
                 path: 'dashboard',
-                loadChildren: () => import('app/main/dashboard/dashboard.module').then(m => m.DashboardModule),
+                loadChildren: () =>
+                    import('app/main/dashboard/dashboard.module').then(
+                        (m) => m.DashboardModule
+                    ),
+                canActivate: [AuthGuard],
+            },
+            // =============================>> Create route Product
+            {
+                path: 'product',
+                loadChildren: () =>
+                    import('app/main/product/product.maingit .module').then(
+                        (m) => m.ProductMainModule
+                    ),
                 canActivate: [AuthGuard],
             },
             // >>>>>>>>>>>>>>>>> Add Ur Code Here <<<<<<<<<<<<<<<<<<<
 
             // 404 & Catch all
-            { path: '404-not-found', pathMatch: 'full', loadChildren: () => import('app/main/error/error-404.module').then(m => m.Error404Module),canActivate: [AuthGuard]},
-            { path: '**', redirectTo: '404-not-found' }
-        ]
-    }
+            {
+                path: '404-not-found',
+                pathMatch: 'full',
+                loadChildren: () =>
+                    import('app/main/error/error-404.module').then(
+                        (m) => m.Error404Module
+                    ),
+                canActivate: [AuthGuard],
+            },
+            { path: '**', redirectTo: '404-not-found' },
+        ],
+    },
 ];
