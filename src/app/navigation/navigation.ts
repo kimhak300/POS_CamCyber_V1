@@ -33,7 +33,7 @@ export const defaultNavigation: NavigationItem[] = [
                 link: 'product/all',
             },
             {
-                id: 'type',
+                id: 'product type',
                 title: 'ប្រភេទ',
                 type: 'basic',
                 icon: 'heroicons_solid:chevron-right',
