@@ -78,4 +78,11 @@ export class UserService {
             this.httpOptions
         );
     }
+    // ==================== Create function for delete user
+    delete(id: number = 0): any {
+        return this.http.delete(
+            this.url + '/admin/users/' + id,
+            this.httpOptions
+        );
+    }
 }
