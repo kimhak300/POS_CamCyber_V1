@@ -55,4 +55,12 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_outline:people',
         link: '/users',
     },
+    //===================================>> Create Menu "POS" in navigation
+    {
+        id: 'pos',
+        title: 'ការបញ្ជាទិញ',
+        type: 'basic',
+        icon: 'mat_solid:desktop_mac',
+        link: '/pos',
+    },
 ];
