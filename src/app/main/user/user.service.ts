@@ -71,4 +71,11 @@ export class UserService {
             this.httpOptions
         );
     }
+    // =================== Create function for block user
+    blockUser(id: number = 0): any {
+        return this.http.post(
+            this.url + '/admin/users/block/' + id,
+            this.httpOptions
+        );
+    }
 }
