@@ -60,6 +60,15 @@ export const appRoutes: Route[] = [
                     ),
                 canActivate: [AuthGuard],
             },
+            // =============================>> User
+            {
+                path: 'users',
+                loadChildren: () =>
+                    import('app/main/user/user.module').then(
+                        (m) => m.UserModule
+                    ),
+                canActivate: [AuthGuard],
+            },
             // >>>>>>>>>>>>>>>>> Add Ur Code Here <<<<<<<<<<<<<<<<<<<
 
             // 404 & Catch all
