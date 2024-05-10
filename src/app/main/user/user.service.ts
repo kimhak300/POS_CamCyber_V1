@@ -63,27 +63,11 @@ export class UserService {
         );
     }
 
-    // ==================== Update User
-    delete(id: number = 0): any {
-        return this.http.delete(
-            this.url + '/admin/users/' + id,
-            this.httpOptions
-        );
-    }
-
     // =================== Update password
     changePassword(id: number = 0, data: object = {}): any {
         return this.http.post(
             this.url + '/admin/users/' + id + '/change-password',
             data,
-            this.httpOptions
-        );
-    }
-
-    // =================== Update password
-    blockUser(id: number = 0): any {
-        return this.http.post(
-            this.url + '/admin/users/block/' + id,
             this.httpOptions
         );
     }
