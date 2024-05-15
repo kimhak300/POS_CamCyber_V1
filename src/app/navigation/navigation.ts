@@ -71,4 +71,12 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_solid:shopping_cart',
         link: '/sales',
     },
+    //===================================>>Create menu my-profile in navigagtion
+    {
+        id: 'profile',
+        title: 'គណនី',
+        type: 'basic',
+        icon: 'mat_outline:person',
+        link: '/my-profile',
+    },
 ];
