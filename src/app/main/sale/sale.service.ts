@@ -32,7 +32,13 @@ export class SaleService {
         httpOptions['params'] = params;
         return this.http.get(this.url + '/admin/sales', httpOptions);
     }
-    //==================================================================
+    // ==================== Print One Product
+    print(receipt_number: number = 0): any {
+        return this.http.get(
+            this.url + '/admin/sales/print/' + receipt_number,
+            this.httpOptions
+        );
+    }
 
     //// =================================>> Convert base64 to blob
     b64toBlob(b64Data: any, contentType: any, sliceSize: any) {
