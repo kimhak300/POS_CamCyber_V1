@@ -39,6 +39,14 @@ export class SaleService {
             this.httpOptions
         );
     }
+    // ==================== Delete One Product
+    delete(id: number = 0): any {
+        return this.http.delete(
+            this.url + '/admin/sales/' + id,
+            this.httpOptions
+        );
+    }
+    //==================================================================
 
     //// =================================>> Convert base64 to blob
     b64toBlob(b64Data: any, contentType: any, sliceSize: any) {
