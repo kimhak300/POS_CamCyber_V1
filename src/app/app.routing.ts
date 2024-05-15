@@ -85,6 +85,16 @@ export const appRoutes: Route[] = [
                     ),
                 canActivate: [AuthGuard],
             },
+            // =============================>> Create route my-profile
+            {
+                path: 'my-profile',
+                loadChildren: () =>
+                    import('app/main/my-profile/my-profile.module').then(
+                        (m) => m.MyProfileModule
+                    ),
+                canActivate: [AuthGuard],
+            },
+
             // >>>>>>>>>>>>>>>>> Add Ur Code Here <<<<<<<<<<<<<<<<<<<
 
             // 404 & Catch all
