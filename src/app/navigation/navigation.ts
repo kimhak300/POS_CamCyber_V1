@@ -63,4 +63,12 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_solid:desktop_mac',
         link: '/pos',
     },
+    //===================================>> Create Menu 'Sale' in navigation
+    {
+        id: 'sale',
+        title: 'ការលក់',
+        type: 'basic',
+        icon: 'mat_solid:shopping_cart',
+        link: '/sales',
+    },
 ];
