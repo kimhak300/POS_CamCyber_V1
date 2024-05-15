@@ -76,6 +76,15 @@ export const appRoutes: Route[] = [
                     import('app/main/pos/pos.module').then((m) => m.PosModule),
                 canActivate: [AuthGuard],
             },
+            // =============================>> Create route Sale
+            {
+                path: 'sales',
+                loadChildren: () =>
+                    import('app/main/sale/sale.module').then(
+                        (m) => m.SaleModule
+                    ),
+                canActivate: [AuthGuard],
+            },
             // >>>>>>>>>>>>>>>>> Add Ur Code Here <<<<<<<<<<<<<<<<<<<
 
             // 404 & Catch all
