@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Testing\ExternalService;
+//namespace App\Http\Controllers\Testing\ExternalService;
 
 // ============================================================================>> Core Library
-use Illuminate\Http\Request; // For Getting requested Payload from Client
-use Illuminate\Http\Response; // For Responsing data back to Client
-use Illuminate\Support\Facades\Http; // For Calling External Service
+// use Illuminate\Http\Request; // For Getting requested Payload from Client
+// use Illuminate\Http\Response; // For Responsing data back to Client
+// use Illuminate\Support\Facades\Http; // For Calling External Service
 
 
-class JSReportController
-{
-    $url = $this->"https://kimhak.jsreportonline.net";
+// class JSReportController
+// {
+//     $url = $this->"https://kimhak.jsreportonline.net";
             // Debugging: Log the constructed URL
-            info("Constructed URL: $url");
+            // info("Constructed URL: $url");
 
             // // Get Data from DB
             // $receipt = Order::select('id', 'receipt_number', 'cashier_id', 'total_price', 'ordered_at')
@@ -31,34 +31,34 @@ class JSReportController
             // // }
 
             // // Prepare Payload for JS Report Service
-            $payload = [
-                "template" => [
-                    "name" => "/cv/main"
-                ],
-                // "data" => [
-                //     'total' => $totalPrice,
-                //     'data'  => $receipt,
-                // ],
-                'data'  => "dara"
-            ];
+            // $payload = [
+            //     "template" => [
+            //         "name" => "/cv/main"
+            //     ],
+            //     // "data" => [
+            //     //     'total' => $totalPrice,
+            //     //     'data'  => $receipt,
+            //     // ],
+            //     'data'  => "dara"
+            // ];
 
             // Send Request to JS Report Service
-            $response = Http::withBasicAuth("kimhak029@gmail.com", "22446688Ac")
-                ->withHeaders([
-                    'Content-Type' => 'application/json',
-                ])
-                ->post($url, $payload);
+            // $response = Http::withBasicAuth("kimhak029@gmail.com", "22446688Ac")
+            //     ->withHeaders([
+            //         'Content-Type' => 'application/json',
+            //     ])
+            //     ->post($url, $payload);
 
             // Success Response Back to Client
-            return [
-                'file_base64'   => base64_encode($response),
-                'error'         => '',
-            ];
+//             return [
+//                 'file_base64'   => base64_encode($response),
+//                 'error'         => '',
+//             ];
 
-    public function generateInvoice(Request $req){
+//     public function generateInvoice(Request $req){
 
-    }
+//     }
 
-}
+// }
 
 
