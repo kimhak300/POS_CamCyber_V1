@@ -1,4 +1,3 @@
-// ==========================================================>> Core Library
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import {
     NgForm,

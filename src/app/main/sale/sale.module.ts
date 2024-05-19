@@ -11,7 +11,7 @@ import { DetailsComponent } from './view-detail-dialog/details.component';
 
 const saleRoutes: Routes = [
     {
-        path: 'xyz',
+        path: '',
         component: ListingComponent,
     },
 ];

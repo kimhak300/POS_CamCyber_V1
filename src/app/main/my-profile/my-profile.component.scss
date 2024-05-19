@@ -1,21 +1,21 @@
-.container-listing-pos-section {
+.container-my-profiles-section {
     width: 100%;
     height: calc(100dvh - 3.75rem);
     overflow: hidden;
 
-    .container-listing-pos-header {
+    .container-my-profiles-header {
         width: 100%;
         background-color: #1470ad;
         min-height: 12rem;
         max-height: 12rem;
     }
 
-    .container-listing-pos-body {
+    .container-my-profiles-body {
         width: 100%;
         height: calc(100dvh - 3.75rem);
         overflow: hidden;
 
-        .container-listing-pos-content {
+        .container-my-profiles-content {
             width: 100%;
             max-height: calc(100dvh - 5.75rem);
             overflow: hidden;
@@ -24,7 +24,7 @@
 }
 
 ::ng-deep
-    .container-listing-pos-content
+    .container-my-profiles-content
     .mat-tab-group
     .mat-tab-header
     .mat-tab-label-container

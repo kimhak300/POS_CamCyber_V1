@@ -1,4 +1,4 @@
-// ==========================================================>> Custom Library
+//==========================================================>> Custom Library
 import { NavigationItem } from 'helpers/components/navigation';
 let isAdmin = true;
 
@@ -11,7 +11,23 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_outline:dashboard',
         link: '/dashboard',
     },
-    //===================================>> Create Menu "Product" in navigation
+    //===================================>> POS
+    {
+        id: 'pos',
+        title: 'ការបញ្ជាទិញ',
+        type: 'basic',
+        icon: 'mat_solid:desktop_mac',
+        link: '/pos',
+    },
+    //===================================>> Sale
+    {
+        id: 'sale',
+        title: 'ការលក់',
+        type: 'basic',
+        icon: 'mat_solid:shopping_cart',
+        link: '/sales',
+    },
+
     {
         hidden() {
             isAdmin = true;
@@ -33,7 +49,7 @@ export const defaultNavigation: NavigationItem[] = [
                 link: 'product/all',
             },
             {
-                id: 'product type',
+                id: 'type',
                 title: 'ប្រភេទ',
                 type: 'basic',
                 icon: 'heroicons_solid:chevron-right',
@@ -41,10 +57,11 @@ export const defaultNavigation: NavigationItem[] = [
             },
         ],
     },
+    //===========================================>>User
     {
         hidden() {
             isAdmin = true;
-            if (localStorage.getItem('role') == 'Admin') {
+            if (localStorage.getItem('role') === 'Admin') {
                 isAdmin = false;
             }
             return isAdmin;
@@ -55,23 +72,7 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_outline:people',
         link: '/users',
     },
-    //===================================>> Create Menu "POS" in navigation
-    {
-        id: 'pos',
-        title: 'ការបញ្ជាទិញ',
-        type: 'basic',
-        icon: 'mat_solid:desktop_mac',
-        link: '/pos',
-    },
-    //===================================>> Create Menu 'Sale' in navigation
-    {
-        id: 'sale',
-        title: 'ការលក់',
-        type: 'basic',
-        icon: 'mat_solid:shopping_cart',
-        link: '/sales',
-    },
-    //===================================>>Create menu my-profile in navigagtion
+
     {
         id: 'profile',
         title: 'គណនី',
