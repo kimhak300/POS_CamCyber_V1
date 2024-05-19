@@ -16,12 +16,9 @@ class TelegramController
         // ===>> Get Credentail from ENV Variable
         $botToken  = env('TELEGRAM_BOT_TOKEN');
         $chatID    = env('TELEGRAM_CHAT_ID');
-<<<<<<< HEAD
+
         $chatID    = -1002109105991;
         
-=======
-
->>>>>>> c38bff790559aeaa5cfb9e24bde841ac3a2ce8b1
         // ===>> Send Request to Telegram
         $res = Http::get("https://api.telegram.org/$botToken/sendMessage", [
             'chat_id' => $chatID,

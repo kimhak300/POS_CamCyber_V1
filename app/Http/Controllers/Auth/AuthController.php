@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 // ===================================================>> Core Library
-<<<<<<< HEAD
+
 use Illuminate\Http\Request; // For Getting requested Payload from Client
-=======
-use Illuminate\Http\Request; // For Getting requested Data from Client
->>>>>>> 8f263181d1538d00f91cd807ef16c74ed76ffea6
 use Illuminate\Http\Response; // For Responsing data back to Client
 
 // ===================================================>> Third Party Library fuck
