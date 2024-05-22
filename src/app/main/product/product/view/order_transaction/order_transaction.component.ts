@@ -1,12 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+// app-transaction.component.ts
+import {
+    Component,
+    Input,
+    OnInit,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
+import { ProductsService } from '../../product.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SnackbarService } from 'app/shared/services/snackbar.service';
 import { GlobalConstants } from 'app/shared/global-constants';
-import { ProductsService } from '../../product.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-order-transaction',
+    selector: 'app-transaction',
     templateUrl: './order_transaction.component.html',
     styleUrls: ['./order_transaction.component.scss'],
 })
@@ -31,8 +40,8 @@ export class OrderTransactionComponent implements OnInit {
     public to: any;
 
     constructor(
-        private _productService: ProductsService,
-        private _snackbarService: SnackbarService
+        private productService: ProductsService,
+        private _snackBar: SnackbarService
     ) {}
 
     ngOnInit(): void {
@@ -59,7 +68,7 @@ export class OrderTransactionComponent implements OnInit {
         }
 
         this.isLoading = true;
-        this._productService.getTransactions(this.productId, param).subscribe({
+        this.productService.getTransactions(this.productId, param).subscribe({
             next: (res: any) => {
                 this.isLoading = false;
                 this.datas = res.order_details?.data;
@@ -70,7 +79,7 @@ export class OrderTransactionComponent implements OnInit {
             },
             error: (err: HttpErrorResponse) => {
                 this.isLoading = false;
-                this._snackbarService.openSnackBar(
+                this._snackBar.openSnackBar(
                     err.error ? err.error.message : 'Something went wrong.',
                     GlobalConstants.error
                 );

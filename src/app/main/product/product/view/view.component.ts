@@ -22,8 +22,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { SnackbarService } from 'app/shared/services/snackbar.service';
 import { ProductsService } from '../product.service';
 import { environment as env } from 'environments/environment';
-//  import { LoadingService } from 'helpers/services/loading';
-//  import { OverViewComponent } from './overview/overview.component';
+import { LoadingService } from 'helpers/services/loading';
+import { OverViewComponent } from './overview/overview.component';
 @Component({
     selector: 'app-view',
     templateUrl: './view.component.html',
@@ -43,7 +43,6 @@ export class ViewComponent implements OnInit {
     public id: number;
     public isSearching = false;
     public productId: number;
-    overviewComponent: any;
 
     constructor(
         private _formBuilder: UntypedFormBuilder,
@@ -65,8 +64,8 @@ export class ViewComponent implements OnInit {
                 this.isSearching = false;
                 console.log('Data in UpdateComponent:', this.data);
 
-                //  Uncomment the line below for testing the data flow
-                this.overviewComponent.data = this.data;
+                // Uncomment the line below for testing the data flow
+                // this.overviewComponent.data = this.data;
             },
             (error) => {
                 console.error('Error loading data:', error);
