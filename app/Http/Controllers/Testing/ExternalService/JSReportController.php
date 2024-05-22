@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http; // For Calling External Service
 
 class JSReportController
 {
-    $url = $this->"https://kimhak.jsreportonline.net";
+    $url = "https://kimhak.jsreportonline.net/api/report";
             // Debugging: Log the constructed URL
             info("Constructed URL: $url");
 
@@ -33,13 +33,13 @@ class JSReportController
             // // Prepare Payload for JS Report Service
             $payload = [
                 "template" => [
-                    "name" => "/cv/main"
+                    "name" => "/Invoice/main"
                 ],
                 // "data" => [
                 //     'total' => $totalPrice,
                 //     'data'  => $receipt,
                 // ],
-                'data'  => "dara"
+                'data'  => $receipt,
             ];
 
             // Send Request to JS Report Service
