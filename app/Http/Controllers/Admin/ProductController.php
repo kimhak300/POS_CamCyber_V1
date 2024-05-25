@@ -2,30 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-// ============================================================================>> Core Library
-use Illuminate\Http\Request; // For Getting requested Payload from Client
-use Illuminate\Http\Response; // For Responsing data back to Client
-use Illuminate\Pagination\Paginator;
 
-
-// ============================================================================>> Third Party Library កខគឃង
-use Carbon\Carbon; // Data Time format & Calculation
-
-// ============================================================================>> Custome Library
-// Controller
 use App\Http\Controllers\MainController;
-
-// Service
-use App\Services\FileUpload; // Upload Image/File to File Micro Serivce
-
-// Model
-use App\Models\Product\Product;
+use App\Models\Products\Product;
+use App\Services\FileUpload;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ProductController extends MainController
 {
+    //
     public function getData(Request $req){
 
-        // Declare Variable
+        // Declar Variable
         $data = Product::select('*')
         ->with(['type'])
         ;
@@ -52,7 +42,6 @@ class ProductController extends MainController
         return response()->json($data, Response::HTTP_OK);
 
     }
-
     public function view($id = 0){
 
         // Find record from DB
@@ -76,9 +65,10 @@ class ProductController extends MainController
 
     }
 
-    public function create(Request $req){
 
-        // ===>> Check validation
+    public function create(Request $req)
+    {
+        // Check validation
         $this->validate(
             $req,
             [
@@ -100,48 +90,35 @@ class ProductController extends MainController
                 'type_id.exists'        => 'សូមជ្រើសរើសឈ្មោះផលិតផល អោយបានត្រឹមត្រូវ កុំបោកពេក'
 
             ]
+
         );
+        $product                = new Product;
+        $product->name          = $req->name;
+        $product->code          = $req->code;
+        $product->type_id       = $req->type_id;
+        $product->unit_price    = $req->unit_price;
 
-        // ===>> Field Mapping Product
-        // Map field of table in DB Vs. requested value from client
-        $product                =   new Product;
-        $product->name          =   $req->name;
-        $product->code          =   $req->code;
-        $product->type_id       =   $req->type_id;
-        $product->unit_price    =   $req->unit_price;
-
-        // ===>> Save To DB
+        //Save the data to DB
         $product->save();
 
-        // ===>> Image Upload
+        //  Upload image
         if ($req->image) {
 
-            //return $req->image;
-
-            // ===>> Send to File Service
+            // Crate folder for image and then stored the image in the folder
             $folder = Carbon::today()->format('d-m-y');
-            $image  = FileUpload::uploadFile($req->image, 'products/' .$folder, $req->fileName);
+            $image  = FileUpload::uploadFile($req->image, 'products/' . $folder, $req->fileName);
 
-            // ===>> Check if image has been successfully uploaded
-            if ($image['url']) {
-
-                // Map field of table in DB Vs. uri from File Service
-                $product->image     = $image['url'];
-
-                // ===>> Save to DB
-                $product->save();
-
-            }
+            // Save image
+            $product->image  = $image['url'];
+            $product->save();
         }
 
-        // ===> Success Response Back to Client
+        // send response back to clients as json
         return response()->json([
-            'data'      =>  $product,
+            'data'      => Product::select('*')->with(['type'])->find($product->id),
             'message'   => 'ផលិតផលត្រូវបានបង្កើតដោយជោគជ័យ។'
         ], Response::HTTP_OK);
-
     }
-
 
     public function update(Request $req, $id = 0){
 
@@ -256,58 +233,4 @@ class ProductController extends MainController
 
         }
     }
-
-    public function getProduct($id = 0, Request $req){
-        try {
-            // Fetch a specific product by ID
-            $product = Product::with(['orderDetails.order'])
-                ->find($id);
-            if (!$product) {
-                // Return an error response if the product is not found
-                return response()->json(['error' => 'Product not found.'], Response::HTTP_NOT_FOUND);
-            }
-
-             // ===>> Date Range
-            // Date Range Filter
-        if ($req->from && $req->to && $this->_isValidDate($req->from) && $this->_isValidDate($req->to)) {
-            $product->orderDetails = $product->orderDetails->filter(function ($orderDetail) use ($req) {
-                $orderedAt = strtotime($orderDetail->order->ordered_at);
-                $fromTimestamp = strtotime($req->from . " 00:00:00");
-                $toTimestamp = strtotime($req->to . " 23:59:59");
-                return $orderedAt >= $fromTimestamp && $orderedAt <= $toTimestamp;
-            });
-        }
-
-            // Filter by receipt number if it's provided in the request
-            if ($req->has('receipt_number') && $req->filled('receipt_number')) {
-                $product->orderDetails = $product->orderDetails->filter(function ($orderDetail) use ($req) {
-                    return $orderDetail->order->receipt_number == $req->input('receipt_number');
-                });
-            }
-
-            // Get the limit from the request or use a default of 10
-            $limit = $req->input('limit', 10);
-
-            // Paginate the orderDetails array with the specified limit
-            $orderDetails = new \Illuminate\Pagination\LengthAwarePaginator(
-                $product->orderDetails->values()->forPage($req->input('page', 1), $limit),
-                count($product->orderDetails),
-                $limit,
-                $req->input('page', 1)
-            );
-
-            // Append the paginated orderDetails to the product
-            $product->setRelation('orderDetails', $orderDetails);
-
-            // Return the product along with its paginated and ordered orderDetails
-            return response()->json($product, Response::HTTP_OK);
-        } catch (\Exception $e) {
-            // Handle any exceptions, if needed
-            return response()->json([
-                'status'    => 'បរាជ័យ',
-                'message'   => 'ទិន្នន័យមិនត្រឹមត្រូវ',
-            ], Response::HTTP_BAD_REQUEST);
-        }
-    }
-
 }

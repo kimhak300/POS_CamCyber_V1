@@ -16,4 +16,39 @@ class TelegramService
             return $e->getMessage();
         }
     }
+
+    public function sendPhoto(Request $req){
+
+        // Check Validation
+        $req->validate([
+            'photo' => 'required|file|max:51200', //50MB
+        ]);
+
+
+
+        if ($req->hasFile('photo')) {
+
+            // ===>> Get Credentail from ENV Variable
+            $botToken  = env('TELEGRAM_BOT_TOKEN');
+            $chatID    = env('TELEGRAM_CHAT_ID');
+            $photo = $req->file('photo');
+
+
+
+            // ===>> Send Request to Telegram
+            $res = Http::attach(
+                'photo',
+                file_get_contents($photo->getRealPath()),
+                $photo->getClientOriginalName()
+            )->post("https://api.telegram.org/$botToken/sendPhoto", [
+                'chat_id' => $chatID,
+            ]);
+
+            // ===>> Success Response Back to Client
+            return response()->json($res, Response::HTTP_OK);
+
+        }else{
+            return $req;
+        }
+    }
 }
