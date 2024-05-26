@@ -48,7 +48,7 @@ class ProductSeeder extends Seeder
             [
                 'code' => 'B001',
                 'type_id' => '1',
-                'name' => 'នំកញ្ចប់',
+                'name' => 'នំកញ្ចប់សម្លខ្មែរ',
                 'unit_price' => 1000,
                 'image' => 'static/Products/Snack/1.jpg',
                 'created_at' => now(),
@@ -57,7 +57,7 @@ class ProductSeeder extends Seeder
             [
                 'code' => 'B002',
                 'type_id' => '1',
-                'name' => 'នំកញ្ចប់',
+                'name' => 'នំកញ្ចប់សម្លគីរី',
                 'unit_price' => 1000,
                 'image' => 'static/Products/Snack/2.jpg',
                 'created_at' => now(),

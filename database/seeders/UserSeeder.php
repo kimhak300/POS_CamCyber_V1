@@ -35,10 +35,10 @@ class UserSeeder extends Seeder
             [
                 'type_id'       => 1,
                 'email'         => 'kimhak300@gmail.com',
-                'phone'         => '0884317616',
+                'phone'         => '0977779688',
                 'password'      => bcrypt('123456'),
                 'is_active'     => 1,
-                'name'          => 'Sopatt Roeun',
+                'name'          => 'Noem Koemhak',
                 'avatar'        => 'static/icon/user.png',
                 'created_at'    => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at'    =>  Carbon::now()->format('Y-m-d H:i:s')
