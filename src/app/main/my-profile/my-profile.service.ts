@@ -23,6 +23,7 @@ export interface ResponseLogin {
     user: User;
     role: string;
 }
+
 @Injectable({
     providedIn: 'root',
 })
@@ -35,39 +36,40 @@ export class MyProfileService {
     constructor(private http: HttpClient) {}
 
     // ==================== Get Profile
-    getProfile(): any {
-        return this.http.get(this.url + '/my-profiles', this.httpOptions);
+    getProfile(): Observable<User> {
+        return this.http.get<User>(`${this.url}/profile`, this.httpOptions);
     }
 
     // ==================== Update Profile
-    updateProfile(data: any): any {
-        return this.http.post(
-            this.url + '/my-profiles',
+    updateProfile(data: any): Observable<any> {
+        return this.http.post<any>(
+            `${this.url}/profile`,
             data,
             this.httpOptions
         );
     }
 
     // =================== Update password
-    updatePassword(data: any): any {
-        return this.http.post(
-            this.url + '/my-profiles/change-password',
+    updatePassword(data: any): Observable<any> {
+        return this.http.post<any>(
+            `${this.url}/profile/change-password`,
             data,
             this.httpOptions
         );
     }
 
     // ==================== user service for replay ====================== \\
-    private _user: ReplaySubject<any> = new ReplaySubject<any>();
-    set user(value: any) {
+    private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
+    set user(value: User) {
         this._user.next(value);
     }
-    get user$(): Observable<any> {
+    get user$(): Observable<User> {
         return this._user.asObservable();
     }
+
     //==========================================
     private _refresh: ReplaySubject<ResponseLogin> =
-        new ReplaySubject<ResponseLogin>();
+        new ReplaySubject<ResponseLogin>(1);
     set token(value: ResponseLogin) {
         this._refresh.next(value);
     }

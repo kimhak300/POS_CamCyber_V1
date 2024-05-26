@@ -52,7 +52,7 @@ export class ChangePasswordComponent implements OnInit {
                     Validators.maxLength(20),
                 ],
             ],
-            password: [
+            new_password: [
                 '',
                 [
                     Validators.required,
