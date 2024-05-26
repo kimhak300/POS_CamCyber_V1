@@ -1,4 +1,4 @@
-//==========================================================>> Custom Library
+// ==========================================================>> Custom Library
 import { NavigationItem } from 'helpers/components/navigation';
 let isAdmin = true;
 
@@ -11,23 +11,8 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_outline:dashboard',
         link: '/dashboard',
     },
-    //===================================>> POS
-    {
-        id: 'pos',
-        title: 'ការបញ្ជាទិញ',
-        type: 'basic',
-        icon: 'mat_solid:desktop_mac',
-        link: '/pos',
-    },
-    //===================================>> Sale
-    {
-        id: 'sale',
-        title: 'ការលក់',
-        type: 'basic',
-        icon: 'mat_solid:shopping_cart',
-        link: '/sales',
-    },
 
+    //Menu Product
     {
         hidden() {
             isAdmin = true;
@@ -61,7 +46,7 @@ export const defaultNavigation: NavigationItem[] = [
     {
         hidden() {
             isAdmin = true;
-            if (localStorage.getItem('role') === 'Admin') {
+            if (localStorage.getItem('role') == 'Admin') {
                 isAdmin = false;
             }
             return isAdmin;
@@ -72,7 +57,23 @@ export const defaultNavigation: NavigationItem[] = [
         icon: 'mat_outline:people',
         link: '/users',
     },
-
+    //===================================>> POS
+    {
+        id: 'pos',
+        title: 'ការបញ្ជាទិញ',
+        type: 'basic',
+        icon: 'mat_solid:desktop_mac',
+        link: '/pos',
+    },
+    //===================================>> Sale
+    {
+        id: 'sale',
+        title: 'ការលក់',
+        type: 'basic',
+        icon: 'mat_solid:shopping_cart',
+        link: '/sales',
+    },
+    //===================================>>my-profile
     {
         id: 'profile',
         title: 'គណនី',
