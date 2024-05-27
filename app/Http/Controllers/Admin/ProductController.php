@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\MainController;
-use App\Models\Products\Product;
+
 use App\Services\FileUpload;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-
+use App\Models\Product\Product;
 class ProductController extends MainController
 {
     //
